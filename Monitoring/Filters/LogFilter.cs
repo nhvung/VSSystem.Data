@@ -29,20 +29,22 @@ namespace VSSystem.Data.Monitoring.Filters
 
         List<long> _IDs;
         public List<long> IDs { get { return _IDs; } set { _IDs = value; } }
-
+        List<string> _Tags;
+        public List<string> Tags { get { return _Tags; } set { _Tags = value; } }
         public LogFilter()
         {
             _FieldsValuesItems = new List<FieldsValues>();
             _BeginTicks = 0; ;
             _EndTicks = 0;
             _IDs = new List<long>();
+            _Tags = new List<string>();
         }
 
         protected override void InitFilters()
         {
             base.InitFilters();
 
-            if(_BeginTicks > 0)
+            if (_BeginTicks > 0)
             {
                 _arrayFilters.Add("CreatedTicks >= " + _BeginTicks);
             }
@@ -53,8 +55,8 @@ namespace VSSystem.Data.Monitoring.Filters
             }
 
             if (_FieldsValuesItems?.Count > 0)
-            { 
-                foreach(var fvItem in _FieldsValuesItems)
+            {
+                foreach (var fvItem in _FieldsValuesItems)
                 {
                     string fields = "(" + string.Join(",", fvItem.Fields) + ")";
                     string values = "(" + string.Join(",", fvItem.Values) + ")";
@@ -63,10 +65,19 @@ namespace VSSystem.Data.Monitoring.Filters
                 }
             }
 
-            if(_IDs?.Count > 0)
+            if (_IDs?.Count > 0)
             {
                 string ft = BaseFilter.GetFilter("ID", _IDs.ToArray());
-                if(!string.IsNullOrWhiteSpace(ft))
+                if (!string.IsNullOrWhiteSpace(ft))
+                {
+                    _arrayFilters.Add(ft);
+                }
+            }
+
+            if (_Tags?.Count > 0)
+            {
+                string ft = BaseFilter.GetFilter("Tag", _Tags.ToArray());
+                if (!string.IsNullOrWhiteSpace(ft))
                 {
                     _arrayFilters.Add(ft);
                 }

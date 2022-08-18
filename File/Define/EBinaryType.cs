@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace VSSystem.Data.File.Define
+﻿namespace VSSystem.Data.File.Define
 {
     public enum EBinaryType : byte
     {
@@ -21,6 +17,7 @@ namespace VSSystem.Data.File.Define
         Decimal = 12,
         String = 13,
         Bytes = 14,
-        SByte = 15
+        SByte = 15,
+        Stream = 16
     }
 }

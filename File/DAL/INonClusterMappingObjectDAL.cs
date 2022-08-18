@@ -9,16 +9,34 @@ namespace VSSystem.Data.File.DAL
     public class INonClusterMappingObjectDAL<TDTO> : IMappingObjectDAL<TDTO>
         where TDTO : MappingObjectDTO
     {
-        const string _CREATE_TABLE_STATEMENTS = "create table if not exists `{{0}}` (`ID` int primary key AUTO_INCREMENT, `{0}` bigint, `Base_ID` bigint, `CreatedDateTime` bigint, index (`{0}`), index (`Base_ID`), index(`CreatedDateTime`));";
+        const string _CREATE_TABLE_STATEMENTS = "create table if not exists `{{0}}` ("
+        + "`ID` int primary key AUTO_INCREMENT, "
+        + "`{1}` bigint, "
+        + "`Base_ID` bigint, "
+        + "`ObjectKey` varchar(50), "
+        + "`CreatedDateTime` bigint, "
+        + "index (`{1}`), "
+        + "index (`Base_ID`), "
+        + "index (`ObjectKey`), "
+        + "index(`CreatedDateTime`)"
+        + ");";
 
         public INonClusterMappingObjectDAL(string tableName, string item_IDFieldName) : base(tableName, item_IDFieldName)
         {
-            _CreateTableStatements = _CREATE_TABLE_STATEMENTS;
+        }
+        public INonClusterMappingObjectDAL(string tableName) : base(tableName)
+        {
         }
 
         public INonClusterMappingObjectDAL(string tableName, string item_IDFieldName, SqlPoolProcess sqlPoolProcess) : base(tableName, item_IDFieldName, sqlPoolProcess)
         {
-            _CreateTableStatements = _CREATE_TABLE_STATEMENTS;
+        }
+        public INonClusterMappingObjectDAL(string tableName, SqlPoolProcess sqlPoolProcess) : base(tableName, sqlPoolProcess)
+        {
+        }
+        protected override void _InitCreateTableStatements()
+        {
+            _CreateTableStatements = string.Format(_CREATE_TABLE_STATEMENTS, _TableName, _Item_IDFieldName);
         }
     }
 }

@@ -104,7 +104,7 @@ namespace VSSystem.Data.File.Images.FAL
                     DirectoryInfo rootFolder = new DirectoryInfo(grp.Key.RootPath.Replace("\\", "/"));
                     if (!rootFolder.Exists && !string.IsNullOrEmpty(shareDataFileFolderPath))
                     {
-                        rootFolder = new DirectoryInfo(shareDataFileFolderPath + "/" + rootFolder.Name);
+                        rootFolder = new DirectoryInfo(shareDataFileFolderPath + "/" + Path.GetFileName(rootFolder.Name));
                     }
                     using (FileStream fs = new FileStream(rootFolder.FullName + "/" + grp.Key.RelativePath.Replace("\\", "/"), FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                     {
@@ -139,7 +139,7 @@ namespace VSSystem.Data.File.Images.FAL
                     DirectoryInfo rootFolder = new DirectoryInfo(grp.Key.RootPath.Replace("\\", "/"));
                     if (!rootFolder.Exists && !string.IsNullOrEmpty(shareDataFileFolderPath))
                     {
-                        rootFolder = new DirectoryInfo(shareDataFileFolderPath + "/" + rootFolder.Name);
+                        rootFolder = new DirectoryInfo(shareDataFileFolderPath + "/" + Path.GetFileName(rootFolder.Name));
                     }
                     using (FileStream fs = new FileStream(rootFolder.FullName + "/" + grp.Key.RelativePath.Replace("\\", "/"), FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                     {
@@ -176,7 +176,7 @@ namespace VSSystem.Data.File.Images.FAL
                     DirectoryInfo rootFolder = new DirectoryInfo(grp.Key.RootPath.Replace("\\", "/"));
                     if (!rootFolder.Exists && !string.IsNullOrEmpty(shareDataFileFolderPath))
                     {
-                        rootFolder = new DirectoryInfo(shareDataFileFolderPath + "/" + rootFolder.Name);
+                        rootFolder = new DirectoryInfo(shareDataFileFolderPath + "/" + Path.GetFileName(rootFolder.Name));
                     }
                     using (FileStream fs = new FileStream(rootFolder.FullName + "/" + grp.Key.RelativePath.Replace("\\", "/"), FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                     {

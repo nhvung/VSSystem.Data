@@ -57,26 +57,16 @@ namespace VSSystem.Data
                 {
                     _provider = EDbProvider.Mysql;
                     _connection = new MySqlConnector.MySqlConnection(_connectionString);
-                    if (Environment.OSVersion.VersionString?.IndexOf("windows", StringComparison.InvariantCultureIgnoreCase) >= 0)
-                    {
-                        _connectionString += string.Format("; driver={0}", driver);
-                        _connection = new OdbcConnection(_connectionString);
-                    }
                 }
-                else if (driver.IndexOf("mariadb", StringComparison.InvariantCultureIgnoreCase) >= 0)
-                {
-                    _provider = EDbProvider.MariaDB;
-                    _connection = new MySqlConnector.MySqlConnection(_connectionString);
-                    if (Environment.OSVersion.VersionString?.IndexOf("windows", StringComparison.InvariantCultureIgnoreCase) >= 0)
-                    {
-                        _connectionString += string.Format("; driver={0}", driver);
-                        _connection = new OdbcConnection(_connectionString);
-                    }
-                }
-                else
+                else if (driver.IndexOf("sql server", StringComparison.InvariantCultureIgnoreCase) >= 0)
                 {
                     _provider = EDbProvider.SqlServer;
                     _connection = new SqlConnection(_connectionString);
+                }
+                else
+                {
+                    _provider = EDbProvider.MariaDB;
+                    _connection = new MySqlConnector.MySqlConnection(_connectionString);
                 }
                 _commandTimeout = commandTimeout;
                 _database = "";
@@ -254,7 +244,7 @@ namespace VSSystem.Data
         }
 
         public static TSqlProcess CreateInstance<TSqlProcess>(string server, string username, string password, int port, string database, int connectionTimeout, int commandTimeout, string driver, bool usePool = false, int minPoolSize = 10, int maxPoolSize = 10
-            , Action<string> debugLogAction = null) 
+            , Action<string> debugLogAction = null)
             where TSqlProcess : SqlProcess
         {
             TSqlProcess ins = new SqlProcess(server, username, password, port, database, connectionTimeout, commandTimeout, driver, usePool, minPoolSize, maxPoolSize)
@@ -718,7 +708,7 @@ namespace VSSystem.Data
             }
         }
 
-        public int ExecuteInsert<TDbRecord>(string tableName, string[] fields, TDbRecord record) 
+        public int ExecuteInsert<TDbRecord>(string tableName, string[] fields, TDbRecord record)
             where TDbRecord : SqlDbRecord
         {
             try
@@ -744,12 +734,12 @@ namespace VSSystem.Data
             }
         }
 
-        public int ExecuteInsert<TDbRecord>(string tableName, KeyValuePair<string,string>[] mappingFields, TDbRecord record)
+        public int ExecuteInsert<TDbRecord>(string tableName, KeyValuePair<string, string>[] mappingFields, TDbRecord record)
             where TDbRecord : SqlDbRecord
         {
             try
             {
-                
+
                 var insertFields = _provider == EDbProvider.SqlServer || _provider == EDbProvider.Sqlite
                     ? string.Join(",", mappingFields.Select(ite => "[" + ite.Key + "]"))
                     : string.Join(",", mappingFields.Select(ite => "`" + ite.Key + "`"));
@@ -765,7 +755,7 @@ namespace VSSystem.Data
             }
         }
 
-        public int ExecuteInsert<TDbRecord>(string tableName, string[] fields, List<TDbRecord> records) 
+        public int ExecuteInsert<TDbRecord>(string tableName, string[] fields, List<TDbRecord> records)
             where TDbRecord : SqlDbRecord
         {
             try

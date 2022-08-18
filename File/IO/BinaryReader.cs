@@ -124,5 +124,11 @@ namespace VSSystem.Data.File
             VerifyType(EBinaryType.UInt64);
             return base.ReadUInt64();
         }
+        public Stream ReadStream()
+        {
+            VerifyType(EBinaryType.Stream);
+            long sLength = base.ReadInt64();
+            return base.BaseStream;
+        }
     }
 }

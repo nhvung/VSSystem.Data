@@ -15,7 +15,8 @@ namespace VSSystem.Data.File.DTO
 
         long _Base_ID;
         public long Base_ID { get { return _Base_ID; } set { _Base_ID = value; } }
-
+        string _ObjectKey;
+        public string ObjectKey { get { return _ObjectKey; } set { _ObjectKey = value; } }
         long _CreatedDateTime;
         public long CreatedDateTime { get { return _CreatedDateTime; } set { _CreatedDateTime = value; } }
 

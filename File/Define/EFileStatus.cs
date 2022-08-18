@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace VSSystem.Data.File.Define
+﻿namespace VSSystem.Data.File.Define
 {
     class EFileStatus
     {

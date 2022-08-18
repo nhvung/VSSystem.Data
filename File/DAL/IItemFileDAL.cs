@@ -8,10 +8,17 @@ using VSSystem.Data.File.DTO;
 
 namespace VSSystem.Data.File.DAL
 {
-   public class IItemFileDAL<TDTO> : DataDAL<TDTO>
-        where TDTO : ItemFileDTO
+    public class IItemFileDAL<TDTO> : DataDAL<TDTO>
+         where TDTO : ItemFileDTO
     {
-        const string _CREATE_TABLE_STATEMENTS = "create table if not exists `{0}` (`File_ID` int primary key, `Path` varchar(255), `Status` tinyint, `CreatedDateTime` bigint, index(`Status`), index (`CreatedDateTime`));";
+        const string _CREATE_TABLE_STATEMENTS = "create table if not exists `{0}` ("
+        + "`File_ID` int primary key, "
+        + "`Path` varchar(255), "
+        + "`Status` tinyint, "
+        + "`CreatedDateTime` bigint, "
+        + "index(`Status`), "
+        + "index (`CreatedDateTime`)"
+        + ");";
         public IItemFileDAL(string tableName) : base(Variables.SqlPoolProcess)
         {
             _TableName = tableName;

@@ -7,7 +7,7 @@ using VSSystem.Data.Filters;
 
 namespace VSSystem.Data.DAL
 {
-    public abstract class ADataDAL<TDTO> : ADataDAL 
+    public abstract class ADataDAL<TDTO> : ADataDAL
         where TDTO : DataDTO
     {
         protected string _TableName;
@@ -31,7 +31,7 @@ namespace VSSystem.Data.DAL
         }
         protected virtual void _InitTableStructure()
         {
-            if(_TableStructure != null)
+            if (_TableStructure != null)
             {
                 _CreateTableStatements = _TableStructure.ToSqlString(_provider);
             }
@@ -41,13 +41,13 @@ namespace VSSystem.Data.DAL
             Type type = typeof(TDTO);
             return type.GetProperties().Select(ite => ite.Name).ToList();
         }
-        abstract public  int Insert(TDTO dbObj);
+        abstract public int Insert(TDTO dbObj);
         abstract public int Insert(List<TDTO> dbObjs);
         abstract protected int InsertRetry(TDTO dbObj);
         abstract protected int InsertRetry(List<TDTO> dbObjs);
         abstract public List<TDTO> Search<TFilter>(TFilter filter) where TFilter : BaseFilter;
         abstract public List<TDTO> SearchWithOrder<TFilter>(TFilter filter, string[] orderFields) where TFilter : BaseFilter;
-        abstract public List<TDTO> SearchWithOrder<TFilter>(TFilter filter, List<KeyValuePair<string,string>> selectedFields, List<string> orderFields) where TFilter : BaseFilter;
+        abstract public List<TDTO> SearchWithOrder<TFilter>(TFilter filter, List<KeyValuePair<string, string>> selectedFields, List<string> orderFields) where TFilter : BaseFilter;
         abstract public List<TResult> Search<TResult, TFilter>(TFilter filter) where TFilter : BaseFilter;
         abstract public List<TResult> SearchIDs<TResult, TFilter>(TFilter filter, string[] resultFields) where TFilter : BaseFilter;
         abstract public List<TDTO> GetAllData();
@@ -57,7 +57,8 @@ namespace VSSystem.Data.DAL
         abstract public TResult GetMaxValue<TResult>(string field);
         abstract public TResult GetMinValue<TResult>(string field);
         abstract public int GetTotal<TFilter>(TFilter filter) where TFilter : BaseFilter;
-        public int CreateTable()
+        abstract public int GetTotal<TFilter>(TFilter filter, List<KeyValuePair<string, string>> selectedFields, out string outQuery) where TFilter : BaseFilter;
+        public virtual int CreateTable()
         {
             try
             {

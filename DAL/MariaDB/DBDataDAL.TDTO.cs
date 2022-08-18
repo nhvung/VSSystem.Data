@@ -454,7 +454,7 @@ namespace VSSystem.Data.DAL
                 throw ex;
             }
         }
-        public int CreateTable()
+        public virtual int CreateTable()
         {
             try
             {

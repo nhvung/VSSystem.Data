@@ -248,6 +248,22 @@ namespace VSSystem.Data.File
                 throw ex;
             }
         }
+        static void _Write(FileStream fs, Stream value)
+        {
+            try
+            {
+                using (var bw = new BinaryWriter(fs, Encoding.UTF8, true))
+                {
+                    bw.Write(value);
+                    bw.Close();
+                    bw.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         static void _WriteObject(FileStream fs, object value)
         {
 
@@ -316,6 +332,10 @@ namespace VSSystem.Data.File
                     {
                         _Write(fs, (ushort)value);
                     }
+                    else if (objType.BaseType == typeof(Stream))
+                    {
+                        _Write(fs, (Stream)value);
+                    }
                 }
             }
             catch (Exception ex)
@@ -340,7 +360,7 @@ namespace VSSystem.Data.File
                     {
                         _WriteObject(fs, value);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         position = -1;
                         errorLogAction?.Invoke(ex);

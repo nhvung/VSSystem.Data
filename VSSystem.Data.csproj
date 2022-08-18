@@ -7,7 +7,6 @@
     <Authors>Evidence IQ</Authors>
     <Copyright>Evidence IQ</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageIcon>eiqlogo.jpeg</PackageIcon>
 	  <Version>1.0.7</Version>
 	  <FileVersion>1.0.7</FileVersion>
   </PropertyGroup>
@@ -15,12 +14,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>bin</OutputPath>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="File\Images\BLL\AWSObjectBLL.cs" />
-    <Compile Remove="File\Images\DAL\IAWSObjectDAL.cs" />
-    <Compile Remove="Processes\SqliteV3Process.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="6.0.1" />
@@ -31,14 +24,6 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\..\..\..\eiqlogo.jpeg">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
-
   <ItemGroup>
     <Folder Include="File\Filters\" />
   </ItemGroup>

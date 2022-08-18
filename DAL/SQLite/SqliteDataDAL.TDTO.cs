@@ -501,7 +501,46 @@ namespace VSSystem.Data.DAL
                 throw ex;
             }
         }
-       
+
+        public override int GetTotal<TFilter>(TFilter filter, List<KeyValuePair<string, string>> selectedFields, out string outQuery)
+        {
+            outQuery = string.Empty;
+            bool retryCreateTable = false;
+        RETRY:
+            try
+            {
+                List<string> tSelectedFields = new List<string>();
+                if (selectedFields?.Count > 0)
+                {
+                    foreach (var field in selectedFields)
+                    {
+                        if (!string.IsNullOrWhiteSpace(field.Key))
+                        {
+                            tSelectedFields.Add($"{field.Key}");
+                        }
+                    }
+                }
+                string searchFt = filter.GetFilterQuery();
+                string query = string.Format("select count({3}) from {0} {1} {2}", _TableName, filter.Alias, searchFt, string.Join(", ", tSelectedFields));
+                outQuery = query;
+                int total = ExecuteScalar<int>(query);
+                return total;
+            }
+            catch (Exception ex)
+            {
+                if (_IsTableExistsException(ex))
+                {
+                    if (_AutoCreateTable && !retryCreateTable)
+                    {
+                        CreateTable();
+                        retryCreateTable = true;
+                        goto RETRY;
+                    }
+                }
+                throw ex;
+            }
+        }
+
         public override List<TResult> SearchIDs<TResult, TFilter>(TFilter filter, string[] resultFields)
         {
             bool retryCreateTable = false;
@@ -591,6 +630,6 @@ namespace VSSystem.Data.DAL
             return ex.Message.IndexOf(string.Format("no such table: {0}", _TableName), StringComparison.InvariantCultureIgnoreCase) >= 0;
         }
 
-        
+
     }
 }

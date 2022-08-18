@@ -5,7 +5,7 @@ namespace VSSystem.Data
 {
     public class Variables
     {
-        protected static SqlPoolProcess GetSqlProcessFromIniFile(Func<string, string, string, string> readIniValueFunc, Func<string, string> descryptFunc, string configSection = "database_info"
+        public static SqlPoolProcess GetSqlProcessFromIniFile(Func<string, string, string, string> readIniValueFunc, Func<string, string> descryptFunc, string configSection = "database_info"
             , Action<string> debugLogAction = null, Action<Exception> errorLogAction = null)
         {
             try
@@ -31,7 +31,7 @@ namespace VSSystem.Data
                 {
                     numberOfConnections = 1;
                 }
-                    
+
                 var sqlProcess = new SqlPoolProcess(sqlHost, sqlUsername, sqlPassword, port, sqlDatabase, 120, sqlCommandTimeout, sqlDriver, numberOfConnections, numberOfConnections, debugLogAction);
                 return sqlProcess;
             }
@@ -42,7 +42,7 @@ namespace VSSystem.Data
             return null;
         }
 
-        protected static SqlPoolProcess GetSqlProcess(string sqlHost, string sqlUsername, string sqlPassword, int port, string sqlDatabase, string sqlDriver, int sqlCommandTimeout = 120, int numberOfConnections = 1)
+        public static SqlPoolProcess GetSqlProcess(string sqlHost, string sqlUsername, string sqlPassword, int port, string sqlDatabase, string sqlDriver, int sqlCommandTimeout = 120, int numberOfConnections = 1)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace VSSystem.Data
             }
         }
 
-        protected static SqlitePoolProcess GetSqliteProcessFromIniFile(DirectoryInfo folder, Func<string, string, string, string> readIniValueFunc, Func<string, string> descryptFunc, string configSection = "database_info")
+        public static SqlitePoolProcess GetSqliteProcessFromIniFile(DirectoryInfo folder, Func<string, string, string, string> readIniValueFunc, Func<string, string> descryptFunc, string configSection = "database_info")
         {
             try
             {
@@ -76,14 +76,14 @@ namespace VSSystem.Data
                 }
 
                 SqlitePoolProcess sqlProcess = null;
-                RETRY_INIT:
+            RETRY_INIT:
                 try
                 {
                     sqlProcess = new SqlitePoolProcess(dbFileName, sqlPassword, sqlCommandTimeout, numberOfConnections);
                 }
-                catch(Exception ex) 
+                catch (Exception ex)
                 {
-                    if(ex.Message?.IndexOf("You need to call SQLitePCL.raw.SetProvider().", StringComparison.InvariantCultureIgnoreCase) >= 0
+                    if (ex.Message?.IndexOf("You need to call SQLitePCL.raw.SetProvider().", StringComparison.InvariantCultureIgnoreCase) >= 0
                         || ex.InnerException?.Message?.IndexOf("You need to call SQLitePCL.raw.SetProvider().", StringComparison.InvariantCultureIgnoreCase) >= 0)
                     {
                         goto RETRY_INIT;
@@ -93,12 +93,12 @@ namespace VSSystem.Data
             }
             catch// (Exception ex)
             {
-                
+
             }
             return null;
         }
 
-        protected static SqlitePoolProcess GetSqliteProcess(string dbFileName, string password, int sqlCommandTimeout = 120, int numberOfConnections = 1)
+        public static SqlitePoolProcess GetSqliteProcess(string dbFileName, string password, int sqlCommandTimeout = 120, int numberOfConnections = 1)
         {
             try
             {

@@ -11,7 +11,15 @@ namespace VSSystem.Data.File.DAL
     public class IItemDAL<TDTO> : DataDAL<TDTO>
         where TDTO : ItemDTO
     {
-        const string _CREATE_TABLE_STATEMENTS = "create table if not exists `{0}` (`Sha1` binary(20) primary key, `ID` bigint, `File_ID` int, `Position` bigint, `CreatedDateTime` bigint, unique index (`ID`), index(`File_ID`));";
+        const string _CREATE_TABLE_STATEMENTS = "create table if not exists `{0}` ("
+        + "`Sha1` binary(20) primary key, "
+        + "`ID` bigint, "
+        + "`File_ID` int, "
+        + "`Position` bigint, "
+        + "`CreatedDateTime` bigint, "
+        + "unique index (`ID`), "
+        + "index(`File_ID`)"
+        + ");";
         public IItemDAL(string tableName) : base(Variables.SqlPoolProcess)
         {
             _TableName = tableName;
@@ -73,7 +81,7 @@ namespace VSSystem.Data.File.DAL
 
             try
             {
-                if (ids?.Count > 0) 
+                if (ids?.Count > 0)
                 {
                     string ft = BaseFilter.GetFilter("item", "ID", ids.ToArray());
                     string query = $"select item.ID, item.File_ID, item.Position, itemf.Path from {_TableName} item " +

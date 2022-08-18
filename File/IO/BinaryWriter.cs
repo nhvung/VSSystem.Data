@@ -105,6 +105,11 @@ namespace VSSystem.Data.File
             WriteType(EBinaryType.UInt16);
             base.Write(value);
         }
-
+        public void Write(Stream value)
+        {
+            WriteType(EBinaryType.Stream);
+            base.Write(value.Length);
+            value.CopyTo(base.BaseStream);
+        }
     }
 }

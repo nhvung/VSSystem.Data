@@ -11,7 +11,7 @@ namespace VSSystem.Data.BLL
         where TDAL : DataDAL<TDTO>
         where TDTO : DataDTO
     {
-        
+
         #region Default Methods
         public static List<TDTO> Search<TFilter>(TFilter filter) where TFilter : BaseFilter
         {
@@ -75,9 +75,10 @@ namespace VSSystem.Data.BLL
 
             return result;
         }
-        public static PageDataResult<TDTO> PageSplitSearch<TFilter>(TFilter filter, int pageSize, int pageNumber, List<KeyValuePair<string, string>> selectedFields, List<string> orderFields = null)
+        public static PageDataResult<TDTO> PageSplitSearch<TFilter>(TFilter filter, int pageSize, int pageNumber, List<KeyValuePair<string, string>> selectedFields, out string outQuery, List<string> orderFields = null)
             where TFilter : BaseFilter
         {
+            outQuery = string.Empty;
             if (filter == null)
             {
                 return new PageDataResult<TDTO>();
@@ -86,7 +87,8 @@ namespace VSSystem.Data.BLL
             PageDataResult<TDTO> result = new PageDataResult<TDTO>();
             TDAL dal = GetDAL();
 
-            int total = dal.GetTotal(filter);
+
+            int total = dal.GetTotal(filter, selectedFields, out outQuery);
             if (total > 0)
             {
                 result.PageSize = pageSize;
@@ -115,6 +117,7 @@ namespace VSSystem.Data.BLL
 
             return result;
         }
+
         public static int Insert(TDTO dbObj)
         {
             TDAL dal = GetDAL();

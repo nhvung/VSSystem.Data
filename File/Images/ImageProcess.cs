@@ -11,7 +11,7 @@ namespace VSSystem.Data.File.Images
 {
     public class ImageProcess
     {
-        public const int THUMB_WIDTH = 180, MEDIUM_WIDTH = 300, LARGE_WIDTH = 580;
+        public const int THUMB_WIDTH = 130, MEDIUM_WIDTH = 180, LARGE_WIDTH = 300, EXTRA_LARGE_IMAGE_WIDTH = 580;
         public static void GetImageDimension(byte[] binImage, out int width, out int height)
         {
             width = 0;
@@ -56,7 +56,7 @@ namespace VSSystem.Data.File.Images
             }
             catch { }
         }
-        
+
         static void GetDefaultDimension(byte[] binImage, out int width, out int height)
         {
             width = 0;
@@ -300,7 +300,10 @@ namespace VSSystem.Data.File.Images
                     srcStream.Dispose();
                 }
             }
-            catch { }
+            catch //(Exception ex)
+            {
+
+            }
             return result;
         }
 

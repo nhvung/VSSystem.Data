@@ -67,7 +67,7 @@ namespace VSSystem.Data.DAL
                 int exec = 0;
                 List<string> fields = _GetTypeFields();
                 var exeObjs = dbObjs.ToList();
-                while(exeObjs.Count > 0)
+                while (exeObjs.Count > 0)
                 {
                     var tObjs = exeObjs.Take(_insertBlockSize).ToList();
                     exec += _sqlProcess.ExecuteInsert(_TableName, fields.ToArray(), tObjs);
@@ -117,7 +117,7 @@ namespace VSSystem.Data.DAL
                        : "select column_name from information_schema.columns where table_name = '" + _TableName + "' and table_schema = database()";
                 List<string> fields = ExecuteReader<string>(getDbFieldQuery);
                 int exec = 0;
-               var exeObjs = dbObjs.ToList();
+                var exeObjs = dbObjs.ToList();
                 while (exeObjs.Count > 0)
                 {
                     var tObjs = exeObjs.Take(_insertBlockSize).ToList();
@@ -130,7 +130,7 @@ namespace VSSystem.Data.DAL
             {
                 throw ex;
             }
-        } 
+        }
         #endregion
 
         #region Search
@@ -230,13 +230,13 @@ namespace VSSystem.Data.DAL
                 string sFilter = filter.GetFilterQuery();
 
                 List<string> tSelectedFields = new List<string>();
-                if(selectedFields?.Count > 0)
+                if (selectedFields?.Count > 0)
                 {
-                    foreach(var field in selectedFields)
+                    foreach (var field in selectedFields)
                     {
-                        if(!string.IsNullOrWhiteSpace(field.Key))
+                        if (!string.IsNullOrWhiteSpace(field.Key))
                         {
-                            if(!string.IsNullOrWhiteSpace(field.Value))
+                            if (!string.IsNullOrWhiteSpace(field.Value))
                             {
                                 tSelectedFields.Add($"{field.Key} as {field.Value}");
                             }
@@ -247,9 +247,9 @@ namespace VSSystem.Data.DAL
                         }
                     }
                 }
-                
+
                 string query = string.Format("select * from {0} {1} {2}", _TableName, filter.Alias, sFilter);
-                if(tSelectedFields.Count > 0)
+                if (tSelectedFields.Count > 0)
                 {
                     string sFields = string.Join(", ", tSelectedFields);
                     query = string.Format("select {3} from {0} {1} {2}", _TableName, filter.Alias, sFilter, sFields);
@@ -365,7 +365,7 @@ namespace VSSystem.Data.DAL
                 }
                 throw ex;
             }
-        } 
+        }
         #endregion
 
         public override List<TDTO> GetAllData()
@@ -539,9 +539,48 @@ namespace VSSystem.Data.DAL
                 }
                 throw ex;
             }
-        } 
+        }
+        public override int GetTotal<TFilter>(TFilter filter, List<KeyValuePair<string, string>> selectedFields, out string outQuery)
+        {
+            bool retryCreateTable = false;
+            outQuery = string.Empty;
+        RETRY:
+            try
+            {
+                List<string> tSelectedFields = new List<string>();
+                if (selectedFields?.Count > 0)
+                {
+                    foreach (var field in selectedFields)
+                    {
+                        if (!string.IsNullOrWhiteSpace(field.Key))
+                        {
+                            tSelectedFields.Add($"{field.Key}");
+                        }
+                    }
+                }
+
+                string searchFt = filter.GetFilterQuery();
+                string query = string.Format("select count({3}) from {0} {1} {2}", _TableName, filter.Alias, searchFt, string.Join(", ", tSelectedFields));
+                outQuery = query;
+                int total = ExecuteScalar<int>(query);
+                return total;
+            }
+            catch (Exception ex)
+            {
+                if (_IsTableExistsException(ex))
+                {
+                    if (_AutoCreateTable && !retryCreateTable)
+                    {
+                        CreateTable();
+                        retryCreateTable = true;
+                        goto RETRY;
+                    }
+                }
+                throw ex;
+            }
+        }
         #endregion
-        
+
         protected override List<TResult> ExecuteReader<TResult>(string query)
         {
             bool retryCreateTable = false;
@@ -684,7 +723,7 @@ namespace VSSystem.Data.DAL
 
 
         public override List<TStatResult> Calculate<TFilter, TStatResult>(TFilter filter, KeyValuePair<string, string>[] statFields, KeyValuePair<string, string>[] calculateFields, string[] orderFields = null)
-            //where TFilter : BaseFilter
+        //where TFilter : BaseFilter
         {
             bool retryCreateTable = false;
         RETRY:
@@ -743,6 +782,6 @@ namespace VSSystem.Data.DAL
             return ex.Message.IndexOf(string.Format("Table '{0}.{1}' doesn't exist", _sqlProcess.Database, _TableName), StringComparison.InvariantCultureIgnoreCase) >= 0;
         }
 
-        
+
     }
 }

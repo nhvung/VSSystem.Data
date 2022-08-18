@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using VSSystem.Data.BLL;
-using VSSystem.Data.File.BLL;
-using VSSystem.Data.File.DAL;
+﻿using System.Collections.Generic;
 using VSSystem.Data.File.DTO;
-using VSSystem.Data.File.Images.DAL;
 
 namespace VSSystem.Data.File.Images.BLL
 {
@@ -13,13 +7,13 @@ namespace VSSystem.Data.File.Images.BLL
          where TDAL : File.Images.DAL.IMappingObjectDAL<TDTO>
          where TDTO : MappingObjectDTO
     {
-        static public TDTO GetMappingByIDs(string tableName,long id)
+        new static public TDTO GetMappingByID(string tableName, long id)
         {
             return GetDAL(tableName).GetMappingByID(id);
         }
-        static public List<TDTO> GetMappingByIDs(string tableName, List<long> ids)
+        new static public List<TDTO> GetMappingsByIDs(string tableName, List<long> ids)
         {
-            return GetDAL(tableName).GetMappingByIDs(ids);
+            return GetDAL(tableName).GetMappingsByIDs(ids);
         }
     }
     public class MappingObjectBLL<TMappingObjectDAL> : MappingObjectBLL<TMappingObjectDAL, MappingObjectDTO>
